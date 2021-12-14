@@ -20,6 +20,7 @@
     "dtmf-detection-stream": "^1.2.0",
     "lodash": "^4.17.19",
     "magic-globals": "^0.9.1",
+    "marytts": "github:mmende/marytts",
     "minimist": "^1.2.5",
     "moment": "^2.24.0",
     "morse-decoding-stream": "^1.1.4",
@@ -34,6 +35,8 @@
     "speech-recog-stream": "^1.0.7",
     "tone-stream": "^1.4.0",
     "wav": "^1.0.2",
+    "wav-converter": "^1.0.0",
+    "wavefile": "^11.0.0",
     "ws": "^7.4.6",
     "xml-js": "^1.6.11"
   },

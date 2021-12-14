@@ -17,6 +17,7 @@ const MorseSpeechRecogStream = require('../morse_speech_recog_stream.js')
 const GoogleSpeechRecogStream = require('../google_speech_recog_stream.js')
 const JuliusSpeechRecogStream = require('../julius_speech_recog_stream.js')
 const OlarisSpeechRecogStream = require('../olaris_speech_recog_stream.js')
+const VoskSpeechRecogStream = require('../vosk_speech_recog_stream.js')
 
 const FILE = u.filename()
 
@@ -136,19 +137,22 @@ module.exports = (parent, uuid) => spawn(
                 state.request_id = msg.data.request_id
                 state.conn = msg.conn
 
+                console.log("HEADERS:", msg.data.headers)
                 var language = msg.data.headers['speech-language']
-
+                console.log("Speech recognition language: %s", language)
                 if(language == 'dtmf') {
                     state.stream = new DtmfSpeechRecogStream(uuid, language, state.context, null)
                 } else if(language == 'morse') {
                     state.stream = new MorseSpeechRecogStream(uuid, language, state.context, null)
                 } else {
                     const engine = msg.data.headers['engine'] ? msg.data.headers['engine'] : config.default_sr_engine
-                    
+                    console.log("Speech Synthesis Engine: %s", engine)
                     if(engine == 'julius') {
                         state.stream = new JuliusSpeechRecogStream(uuid, language, state.context, config.julius)
                     } else if(engine == 'olaris') {
                         state.stream = new OlarisSpeechRecogStream(uuid, language, state.context, config.olaris)
+                    } else if(engine == 'vosk') {
+                        state.stream = new VoskSpeechRecogStream(uuid, language, state.context, config.vosk)
                     } else {
                         state.stream = new GoogleSpeechRecogStream(uuid, language, state.context, {})
                     }

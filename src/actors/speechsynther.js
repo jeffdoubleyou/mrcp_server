@@ -15,6 +15,7 @@ const config = require('config')
 const DtmfSpeechSynthStream = require('../dtmf_speech_synth_stream.js')
 const MorseSpeechSynthStream = require('../morse_speech_synth_stream.js')
 const GoogleSpeechSynthStream = require('../google_speech_synth_stream.js')
+const MaryTTSSpeechSynthStream = require('../marytts_speech_synth_stream.js')
 
 const registrar = require('../registrar.js')
 
@@ -147,9 +148,11 @@ module.exports = (parent, uuid) => spawn(
                     state.stream = new MorseSpeechSynthStream(uuid, msg.data, content)
                 } else {
                     const engine = msg.data.headers['engine'] ? msg.data.headers['engine'] : config.default_ss_engine
-                    // engine will be used later when we add support for other SS engines
-
-                    state.stream = new GoogleSpeechSynthStream(uuid, msg.data)
+                    if(config.default_ss_engine === 'marytts') {
+                        state.stream = new MaryTTSSpeechSynthStream(uuid, msg.data, language, config)
+                    } else {
+                        state.stream = new GoogleSpeechSynthStream(uuid, msg.data)
+                    }
                 }
 
                 state.stream.on('ready', () => {
